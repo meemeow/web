@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'Rubber';
-  src: url('./assets/fonts/rubber.TTF') format('truetype');
+  src: url('/assets/fonts/rubber.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -59,6 +59,50 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+/* allow absolutely-positioned hover video inside navbar (cover full header) */
+.navbar {
+  position: fixed;
+}
+
+.hover-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+.hover-video.visible {
+  opacity: 1;
+}
+
+/* ensure navbar content appears above the video */
+.brand,
+.navbar-burger,
+.navbar-links {
+  z-index: 1;
+  position: relative;
+}
+
+/* move home hover view slightly down so bottom of mp4 is more visible */
+.hover-video.hover-home {
+  object-position: center 13%;
+}
+/* apply same vertical shift to other hover videos */
+.hover-video.hover-about {
+  object-position: center 58%;
+}
+.hover-video.hover-projects {
+  object-position: center 70%;
+}
+.hover-video.hover-contact {
+  object-position: center 25%;
+}
 .brand {
   display: flex;
   align-items: center;
@@ -79,7 +123,7 @@ body {
 }
 .navbar-links {
   display: flex;
-  gap: 2.5rem;
+  gap: 3.5rem;
   align-items: center;
 }
 .navbar-links a {
@@ -89,6 +133,41 @@ body {
   padding: 0.75rem 0.75rem; /* increased vertical hit area */
   font-size: 1.125rem;
   position: relative;
+}
+
+/* underline highlight for each nav item (colored bar beneath text) */
+.navbar-links a.nav-link {
+  position: relative;
+  border-radius: 4px;
+  transition: color 180ms ease;
+}
+.navbar-links a.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 6px; /* sits inside the link padding area */
+  height: 4px;
+  width: 0%;
+  background: transparent;
+  border-radius: 2px;
+  transition: width 200ms ease, background-color 200ms ease;
+}
+.navbar-links a.nav-link:hover::after {
+  width: 100%;
+  background: #ffffff; /* white underline for all links */
+}
+/* text color changes per-link on hover (underline remains white) */
+.navbar-links a.nav-link.home:hover {
+  color: #49f9ff; /* sky blue text */
+}
+.navbar-links a.nav-link.about:hover {
+  color: #32CD32; /* lime green text */
+}
+.navbar-links a.nav-link.projects:hover {
+  color: #FF00FF; /* magenta text */
+}
+.navbar-links a.nav-link.contact:hover {
+  color: #FFEB3B; /* yellow text */
 }
 .navbar-burger {
   display: none;
