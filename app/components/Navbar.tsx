@@ -87,7 +87,8 @@ export default function Navbar() {
   }, [open]);
 
   return (
-    <header className={`navbar ${linkHover ? "expanded" : ""} ${open ? "menu-open" : ""}`}>
+    <>
+      <header className={`navbar ${linkHover ? "expanded" : ""} ${open ? "menu-open" : ""}`}>
       <video
         ref={videoRef}
         className={`hover-video ${activeHover ? "visible " : ""}${lastHover ? "hover-" + lastHover : ""}`}
@@ -169,9 +170,9 @@ export default function Navbar() {
         </button>
 
         <nav className={`navbar-links ${open ? "open" : ""}`}>
-          <a
+          <Link
+            href="/"
             className="nav-link home"
-            href="#home"
             onMouseEnter={() => {
               clearLeaveTimer();
               clearHoverLeaveTimer();
@@ -185,10 +186,10 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
           >
             <span className="link-text">Home</span>
-          </a>
-          <a
+          </Link>
+          <Link
+            href="/about"
             className="nav-link about"
-            href="#about"
             onMouseEnter={() => {
               clearLeaveTimer();
               clearHoverLeaveTimer();
@@ -202,10 +203,10 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
           >
             <span className="link-text">About</span>
-          </a>
-          <a
+          </Link>
+          <Link
+            href="/projects"
             className="nav-link projects"
-            href="#projects"
             onMouseEnter={() => {
               clearLeaveTimer();
               clearHoverLeaveTimer();
@@ -219,10 +220,10 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
           >
             <span className="link-text">Projects</span>
-          </a>
-          <a
+          </Link>
+          <Link
+            href="/contact"
             className="nav-link contact"
-            href="#contact"
             onMouseEnter={() => {
               clearLeaveTimer();
               clearHoverLeaveTimer();
@@ -236,7 +237,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
           >
             <span className="link-text">Contact</span>
-          </a>
+          </Link>
         </nav>
         {/* modal overlay behind the dropdown on small screens */}
         {open && (
@@ -249,5 +250,8 @@ export default function Navbar() {
         )}
       </div>
     </header>
+      {/* spacer keeps page content from being overlapped by fixed navbar and animates with it */}
+      <div className={`navbar-spacer ${linkHover ? "expanded" : ""}`} />
+    </>
   );
 }
