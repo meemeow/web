@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useEffect, useState } from "react";
+import SetOutcomeModal from "../components/SetOutcomeModal";
 import { ZodError } from "zod";
 import {
     firstNameSchema,
@@ -39,6 +40,9 @@ export default function Contact() {
 
     const [errors, setErrors] = useState<Record<string, string>>({});
 
+    const [loading, setLoading] = useState(false);
+    const [outcome, setOutcome] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
     const validateField = (name: string, value: string) => {
         try {
             if (name === "firstName") firstNameSchema.parse(value);
@@ -66,7 +70,7 @@ export default function Contact() {
         validateField(name, value);
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const result = contactSchema.safeParse(formData);
         if (!result.success) {
@@ -79,11 +83,36 @@ export default function Contact() {
             return;
         }
 
-        // TODO: wire up actual submit (API / email)
-        console.log("Submitting:", result.data);
         setErrors({});
-        // Optionally reset form
-        // setFormData({ firstName: "", lastName: "", email: "", message: "" });
+        setLoading(true);
+        setOutcome(null);
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(result.data),
+            });
+
+            if (!res.ok) {
+                const json = await res.json().catch(() => ({}));
+                throw new Error(json?.error || 'Send failed');
+            }
+
+            setFormData({ firstName: '', lastName: '', email: '', message: '' });
+            setOutcome({ type: 'success', message: 'Message sent — thank you!' });
+        } catch (err) {
+            const error = err as Error;
+            console.error(error);
+            setErrors((e) => {
+                const next = { ...e };
+                delete next._submit;
+                return next;
+            });
+            setOutcome({ type: 'error', message: error.message || 'Send failed' });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -218,26 +247,38 @@ export default function Contact() {
                                         <button
                                             type="submit"
                                             className="fancy-submit gotham-medium"
+                                            disabled={loading}
                                             onMouseDown={e => e.currentTarget.classList.add('pressed')}
                                             onMouseUp={e => e.currentTarget.classList.remove('pressed')}
                                             onMouseLeave={e => e.currentTarget.classList.remove('pressed')}
                                         >
-                                            {"Send Message".split("").map((ch, i) =>
-                                                ch === " " ? (
-                                                    <span key={i} className="glow-letter-space" aria-hidden="true">&nbsp;</span>
-                                                ) : (
-                                                    <span
-                                                        key={i}
-                                                        className="animate-contact-glow"
-                                                        style={{ animationDelay: `${i * 80}ms`, color: '#171717' }}
-                                                    >
-                                                        {ch}
-                                                    </span>
+                                            {loading ? (
+                                                <span className="text-sm text-gray-700">Sending…</span>
+                                            ) : (
+                                                "Send Message".split("").map((ch, i) =>
+                                                    ch === " " ? (
+                                                        <span key={i} className="glow-letter-space" aria-hidden="true">&nbsp;</span>
+                                                    ) : (
+                                                        <span
+                                                            key={i}
+                                                            className="animate-contact-glow"
+                                                            style={{ animationDelay: `${i * 80}ms`, color: '#171717' }}
+                                                        >
+                                                            {ch}
+                                                        </span>
+                                                    )
                                                 )
                                             )}
                                         </button>
                                     </div>
                                 </div>
+                                {outcome && (
+                                    <SetOutcomeModal
+                                        type={outcome.type}
+                                        message={outcome.message}
+                                        onClose={() => setOutcome(null)}
+                                    />
+                                )}
                             </form>
                         </div>
                     </div>
