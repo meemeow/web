@@ -117,7 +117,7 @@ export default function Contact() {
 
     return (
         <main className="min-h-screen bg-[#121214] text-white">
-            <div className="max-w-9xl mx-10 px-6 py-18">
+            <div className="max-w-9xl mx-2 md:mx-10 px-6 py-10 md:py-18">
                 {/* Hero card */}
                 <section
                     className={`hero-card bg-white/5 border-2 border-white/20 rounded-lg px-28 py-52 mb-24 relative overflow-hidden ${hovered ? "hovered" : ""}`}
@@ -166,7 +166,7 @@ export default function Contact() {
                             </div>
 
                             <div className="flex items-center gap-3 text-gray-300 text-lg md:text-xl">
-                                <img src="/assets/images/linkedin.jpg" alt="LinkedIn" className="w-6 h-6 md:w-7 md:h-7 object-contain" />
+                                <img src="/assets/images/linkedin.jpg" alt="LinkedIn" className="w-5 h-5 object-contain" />
                                 <a href="https://www.linkedin.com/in/emerson-clamor" target="_blank" rel="noopener noreferrer" className="hover:underline">
                                     www.linkedin.com/in/emerson-clamor
                                 </a>
