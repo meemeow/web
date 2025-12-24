@@ -1,0 +1,149 @@
+/* Project page specific styles: hand-drawn card look and layout helpers */
+
+.project-card {
+	background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	border-radius: 14px;
+	border: 4px solid rgba(6,6,6,0.9);
+	box-shadow: 0 8px 24px rgba(0,0,0,0.55), 0 0 0 4px rgba(255,255,255,0.02) inset;
+}
+
+/* Slight irregularity to mimic hand-drawn cards */
+.project-item .project-card,
+.project-row .project-card {
+	transition: transform 200ms ease, box-shadow 200ms ease;
+}
+.project-item:hover .project-card,
+.project-row:hover .project-card {
+	transform: translateY(-4px) rotate(-0.15deg);
+	box-shadow: 0 18px 36px rgba(0,0,0,0.6);
+}
+
+/* Small responsive tweaks to match sketch proportions */
+@media (min-width: 768px) {
+	.project-item { padding: 6px 2px; }
+}
+
+@media (max-width: 767px) {
+	.project-row { flex-direction: column; align-items: stretch; }
+	.project-row .project-card { width: 100% !important; height: 1200px !important; }
+	.project-row > div.text-right { text-align: left; width: 100% !important; }
+}
+
+/* small visual helper: subtly offset some cards for staggered masonry */
+.md\:translate-y-12 { transform: translateY(3rem); }
+
+/* Library preview: default preview -> alt image crossfade on hover/touch for 4s */
+.library_preview {
+	position: relative;
+	background-image: url('/assets/images/library_preview.png');
+	background-size: cover;
+	background-position: center;
+	border-radius: 14px;
+	overflow: hidden;
+}
+
+/* alt-layer is an absolutely positioned element that will show the
+   alternate library images. JS will update its inline background-image
+   and toggle the .show-alt class to crossfade. */
+.library_preview .alt-layer {
+	position: absolute;
+	inset: 0;
+	background-size: cover;
+	background-position: center;
+	opacity: 0;
+	transition: opacity 400ms ease;
+	pointer-events: none;
+	border-radius: inherit;
+}
+
+.library_preview .alt-layer {
+	z-index: 2;
+}
+
+.library_preview .alt-layer.visible {
+	opacity: 1;
+}
+
+/* Project meta: alignment is handled by Tailwind classes (md:text-left / md:text-right) */
+.project-meta .font-semibold {
+	font-size: 2.2rem; /* ~24px — increased for emphasis */
+	letter-spacing: 0.2px;
+}
+.project-meta .text-gray-300 {
+	font-size: 1.0625rem; /* ~17px */
+	line-height: 1.5;
+}
+
+/* Mobile: keep readability by left-aligning and slightly smaller text */
+@media (max-width: 767px) {
+	.project-meta { text-align: left; }
+	.project-meta .font-semibold { font-size: 1.375rem; }
+	.project-meta .text-gray-300 { font-size: 1rem; }
+}
+
+/* Visit button: copied from contact page .fancy-submit for consistent visual language */
+.visit-button {
+	display: inline-flex;
+ 	align-items: center;
+ 	justify-content: center;
+	padding: 0.64rem 1.5rem;
+ 	border-radius: 10px;
+ 	background: #000000;
+ 	color: #ffffff;
+ 	font-family: 'Gotham', Arial, Helvetica, sans-serif;
+ 	font-weight: 500; /* Gotham Medium */
+ 	border: 1px solid rgba(255,255,255,0.08);
+ 	box-shadow: 0 6px 22px rgba(0,0,0,0.6), 0 0 10px rgba(255,255,255,0.04) inset;
+ 	cursor: pointer;
+ 	transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+ 	text-decoration: none;
+}
+.visit-button:active {
+ 	transform: scale(0.96) translateY(2px);
+ 	box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+.visit-button:focus {
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(255,230,216,0.12);
+}
+
+/* Per-character wave (adapted from contact page animation) */
+@keyframes visitGlow {
+	0% {
+		filter: drop-shadow(0 0 0 rgba(255,200,160,0));
+		transform: translateY(0) scale(1);
+		opacity: 0.95;
+	}
+	40% {
+		filter: drop-shadow(0 0 18px rgba(255,180,120,0.36));
+		transform: translateY(-3px) scale(1.02);
+		opacity: 1;
+	}
+	100% {
+		filter: drop-shadow(0 0 0 rgba(255,200,160,0));
+		transform: translateY(0) scale(1);
+		opacity: 0.95;
+	}
+}
+
+.visit-button .wave-char {
+ 	display: inline-block;
+ 	will-change: transform, filter, opacity;
+ 	color: inherit;
+ 	animation: visitGlow 3.2s ease-in-out infinite;
+ 	text-shadow: 0 0 10px rgba(255,255,255,0.9), 0 0 20px rgba(255,255,255,0.08);
+}
+
+.glow-letter-space { display: inline-block; width: 0.42rem; }
+
+/* Responsive sizing for visit-button to match contact button behavior */
+@media (max-width: 768px) {
+ 	.visit-button { width: 70%; min-width: 120px; max-width: 220px; padding: 0.65rem 0.9rem; font-size: 0.95rem; }
+}
+
+@media (max-width: 639px) {
+	.visit-button { margin: 0 auto; display: flex; justify-content: center; width: 70%; }
+}
+

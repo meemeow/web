@@ -21,6 +21,19 @@
   font-family: 'FleurDeLeah', cursive, serif;
 }
 
+/* Rye decorative font for project titles */
+@font-face {
+  font-family: 'Rye';
+  src: url('/assets/fonts/Rye-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.rye-font {
+  font-family: 'Rye', var(--font-gotham), Arial, sans-serif;
+}
+
 /* Utility: Gotham Medium for headings/strong text */
 .gotham-medium {
   font-family: var(--font-gotham);
@@ -149,7 +162,7 @@ body {
 
 /* Hero card hover: subtly scale + increase opacity and play video */
 .hero-card .hero-video {
-  opacity: 0.36; /* subtle base visibility */
+  opacity: 0.56; /* subtle base visibility */
   transform: scale(1);
   transition: opacity 260ms ease, transform 420ms cubic-bezier(.2,.9,.2,1);
   pointer-events: none;
