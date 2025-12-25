@@ -20,6 +20,26 @@
 	box-shadow: 0 18px 36px rgba(0,0,0,0.6);
 }
 
+/* Make the text/meta pop along with the card on hover */
+.project-item .project-meta,
+.project-row .project-meta {
+	transition: transform 220ms cubic-bezier(.2,.9,.2,1), opacity 220ms ease;
+	will-change: transform, opacity;
+}
+.project-item:hover .project-meta,
+.project-row:hover .project-meta {
+	transform: translateY(-6px) scale(1.02);
+	opacity: 1;
+}
+
+/* Disable pop transform on small screens to avoid layout shifts */
+@media (max-width: 767px) {
+	.project-item:hover .project-meta,
+	.project-row:hover .project-meta {
+		transform: none;
+	}
+}
+
 /* Pop-in on scroll: start slightly down/transparent, then pop into place when .in-view is added */
 .project-item {
 	opacity: 0;
@@ -75,8 +95,9 @@
 .library_preview {
 	position: relative;
 	background-image: url('/assets/images/library_preview.png');
-	background-size: cover;
-	background-position: center;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+	background-position: center center;
 	border-radius: 14px;
 	overflow: hidden;
 }
@@ -87,8 +108,9 @@
 .library_preview .alt-layer {
 	position: absolute;
 	inset: 0;
-	background-size: cover;
-	background-position: center;
+	background-size: 100% auto;
+	background-repeat: no-repeat;
+	background-position: center center;
 	opacity: 0;
 	transition: opacity 400ms ease;
 	pointer-events: none;
@@ -184,3 +206,39 @@
 	.visit-button { margin: 0 auto; display: flex; justify-content: center; width: 70%; }
 }
 
+/* Stacked-list: expand project card height on hover to match masonry sizes (desktop) */
+@media (min-width: 768px) {
+	.project-row .project-card {
+		height: 12rem; /* matches h-48 (default stacked height) */
+		transition: height 320ms cubic-bezier(.2,.9,.2,1), transform 200ms ease, box-shadow 200ms ease;
+		overflow: hidden;
+	}
+	.project-row .project-card:hover {
+		height: 28rem; /* reduced from 34rem to avoid excessive expansion */
+	}
+}
+
+/* Ensure the default image stays visible for 2 seconds after hover in stacked view */
+.project-row .library_preview .alt-layer {
+	transition: opacity 400ms ease;
+}
+
+/* Optional: Add a visual indicator that images will cycle (for better UX) */
+.project-row .project-card:hover::after {
+	content: '';
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	width: 12px;
+	height: 12px;
+	background: rgba(255, 255, 255, 0.4);
+	border-radius: 50%;
+	z-index: 3;
+	opacity: 0;
+	animation: fadeIn 0.3s ease 1.5s forwards; /* Show indicator after 1.5s */
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}

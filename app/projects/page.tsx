@@ -305,6 +305,7 @@ function ProjectCard({ p, isEven }: { p: { id: number; title: string; desc: stri
 function ProjectRow({ p }: { p: { id: number; title: string; desc: string; url?: string } }) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const cycleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const expandTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null); // NEW: Timer for expansion delay
   const altARef = useRef<HTMLDivElement | null>(null);
   const altBRef = useRef<HTMLDivElement | null>(null);
   const activeRef = useRef<"a" | "b">("a");
@@ -313,6 +314,7 @@ function ProjectRow({ p }: { p: { id: number; title: string; desc: string; url?:
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
       if (cycleRef.current) clearTimeout(cycleRef.current);
+      if (expandTimerRef.current) clearTimeout(expandTimerRef.current); // NEW: Clear expansion timer
       // Ensure any visible alt layers are hidden and their backgrounds cleared
       hideLayer(altARef);
       hideLayer(altBRef);
@@ -341,10 +343,12 @@ function ProjectRow({ p }: { p: { id: number; title: string; desc: string; url?:
     if (!altImages.length) return;
     if (timerRef.current) clearTimeout(timerRef.current);
     if (cycleRef.current) clearTimeout(cycleRef.current);
+    
     let idx = 0;
     setLayerBg(altARef, altImages[0]);
     showLayer(altARef);
     activeRef.current = "a";
+    
     const advance = () => {
       idx = (idx + 1) % altImages.length;
       const nextLayer = activeRef.current === "a" ? altBRef : altARef;
@@ -355,14 +359,45 @@ function ProjectRow({ p }: { p: { id: number; title: string; desc: string; url?:
       activeRef.current = activeRef.current === "a" ? "b" : "a";
       cycleRef.current = setTimeout(advance, 3000);
     };
-    cycleRef.current = setTimeout(advance, 3000);
+    
+    // Start cycling after 2 seconds (2000ms) instead of 3
+    cycleRef.current = setTimeout(advance, 2000);
   };
 
   const handleClear = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
     if (cycleRef.current) clearTimeout(cycleRef.current);
+    if (expandTimerRef.current) clearTimeout(expandTimerRef.current); // NEW: Clear expansion timer
     hideLayer(altARef);
     hideLayer(altBRef);
+  };
+
+  const handleMouseEnter = () => {
+    if (!hasPreview) return;
+    
+    // Clear any existing timers
+    if (expandTimerRef.current) clearTimeout(expandTimerRef.current);
+    if (cycleRef.current) clearTimeout(cycleRef.current);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    
+    // Start the image cycle after 2 seconds delay
+    expandTimerRef.current = setTimeout(() => {
+      triggerCycle();
+    }, 2000);
+  };
+
+  const handleTouchStart = () => {
+    if (!hasPreview) return;
+    
+    // Clear any existing timers
+    if (expandTimerRef.current) clearTimeout(expandTimerRef.current);
+    if (cycleRef.current) clearTimeout(cycleRef.current);
+    if (timerRef.current) clearTimeout(timerRef.current);
+    
+    // Start the image cycle after 2 seconds delay
+    expandTimerRef.current = setTimeout(() => {
+      triggerCycle();
+    }, 2000);
   };
 
   return (
@@ -370,10 +405,10 @@ function ProjectRow({ p }: { p: { id: number; title: string; desc: string; url?:
       <div
         className={`project-card h-48 bg-white/5 rounded-xl border-2 border-black/80 ${hasPreview ? "library_preview" : ""}`}
         style={hasPreview ? { backgroundImage: `url('/assets/images/${previewName}')` } : undefined}
-        onMouseEnter={() => hasPreview && triggerCycle()}
-        onMouseLeave={() => hasPreview && handleClear()}
-        onTouchStart={() => hasPreview && triggerCycle()}
-        onTouchEnd={() => hasPreview && handleClear()}
+        onMouseEnter={handleMouseEnter} // UPDATED: Use new handler
+        onMouseLeave={handleClear}
+        onTouchStart={handleTouchStart} // UPDATED: Use new handler
+        onTouchEnd={handleClear}
       >
         {hasPreview && (
           <>
