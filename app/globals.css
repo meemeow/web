@@ -8,6 +8,11 @@
   font-display: swap;
 }
 
+/* Utility: Rubber font class usable throughout the app */
+.rubber-font {
+  font-family: 'Rubber', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
 /* Fleur De Leah decorative font (used for contact callout heading) */
 @font-face {
   font-family: 'FleurDeLeah';
@@ -413,6 +418,8 @@ body {
   background: #0A0A0A;
   color: #dcdcdc;
   padding: 1.5rem 0;
+  position: relative;
+  z-index: 6;
 }
 .site-footer-inner {
   max-width: 1200px;
@@ -466,3 +473,99 @@ body {
   display: inline-block;
   margin-top: 0.35rem;
 }
+
+/* Construction page decorative styles */
+.construction-wrap {
+  position: relative;
+  padding: 2.5rem 1rem;
+  border-radius: 0; /* remove rounded panel */
+  background: transparent; /* no panel background */
+  box-shadow: none; /* remove panel shadow */
+  overflow: visible;
+}
+
+.construction-tape {
+  position: absolute;
+  right: -17vw; /* start well off the left edge so stripe spans entire viewport */
+  top: -16rem;
+  width: 60vw; /* very wide so it stretches across the page */
+  height: 3.5rem;
+  background: repeating-linear-gradient(45deg, #ffde59 0 18px, rgba(0,0,0,0) 18px 36px);
+  transform: rotate(-127deg);
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  opacity: 0.98;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.construction-tape.second {
+  transform: rotate(24deg);
+  top: -11rem;
+  right: -6vw; /* start well off the right edge */
+  left: auto;
+  width: 60vw; /* stretch across the page */
+  z-index: 5;
+}
+
+.construction-tape.third {
+  transform: rotate(19deg);
+  top: auto;
+  bottom: -12rem;
+  right: auto;
+  left: -6vw;
+  width: 60vw; /* stretch across the page */
+  z-index: 5;
+}
+
+.construction-tape.fourth {
+  transform: rotate(58deg);
+  top: auto;
+  bottom: -8rem;
+  right: auto; /* start well off the right edge */
+  left: -22vw;
+  width: 60vw; /* stretch across the page */
+  z-index: 5;
+}
+
+.pulse-glow {
+  animation: pulseFloat 2000ms ease-in-out infinite;
+  text-shadow: 0 6px 18px rgba(255,206,0,0.12), 0 0 10px rgba(255,206,0,0.06);
+}
+
+@keyframes pulseFloat {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* Responsive clamp for very small screens (<=420px) */
+@media (max-width: 420px) {
+  .construction-content { flex-direction: column; gap: 0.5rem; }
+  .construction-content img { width: 112px; height: 112px; /* keep current w-28/h-28 size until clamp point */ }
+  /* clamp down at very small widths: reduce image and text size to fit */
+  .construction-wrap .construction-content img { width: 72px; height: 72px; }
+  .construction-wrap p.rye-font { font-size: 1rem; line-height: 1.1; white-space: normal; }
+  /* reduce tape overshoot on very small screens to avoid overflow */
+  .construction-tape,
+  .construction-tape.second,
+  .construction-tape.third,
+  .construction-tape.fourth {
+    width: 120vw;
+    left: -10vw;
+    right: -10vw;
+  }
+
+  /* Adjust tape positions specifically for very small screens */
+  .construction-tape {
+    transform: rotate(-30deg);
+    top: -12rem;
+    left: -20vw;
+  }
+
+  .construction-tape.fourth {
+    transform: rotate(148deg);
+  }
+}
+
+/* floating dots removed - decorative bubbles disabled */
