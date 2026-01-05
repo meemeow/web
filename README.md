@@ -4,7 +4,7 @@
 
 ## Overview
 
-**Meemeow Creations** is my first fully personalized developer portfolio, built using **Next.js**, **React with TypeScript**, **Tailwind CSS**, and custom CSS. This project marks a significant step forward in my growth as a front-end developer, focusing on structure, maintainability, and modern best practices.
+**Meemeow Creations** is my first fully personalized developer portfolio, built using **Next.js**, **React with TypeScript**, **Tailwind CSS**, and custom CSS. This project marks a significant step forward in my growth as a front-end/back-end developer, focusing on structure, maintainability, and modern best practices.
 
 The goal of this portfolio was to create a **Discord-inspired theme**, combining a familiar UI style with a clean and professional presentation of my work and personal information.
 
